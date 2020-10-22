@@ -1,1 +1,3 @@
-token = '1143623173:AAEpYnGbhdke9Ud-eb1YB_-NHNEtjJ3GIng'
+import os
+
+token = os.environ.get('TOKEN')
