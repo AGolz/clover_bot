@@ -1,7 +1,6 @@
 import config
 import telebot
 
-print(config.token)
 bot = telebot.TeleBot(config.token)
 @bot.message_handler(content_types=["text"])
 def repeat_all_messages(message):
