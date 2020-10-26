@@ -4,7 +4,7 @@ import config
 import os
 
 WEBHOOK_HOST = 'botclover.herokuapp.com'
-WEBHOOK_PORT = int(os.environ['PORT']), 5000
+WEBHOOK_PORT = int(os.environ.get("PORT", 5000))
 WEBHOOK_LISTEN = '0.0.0.0'
 
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
