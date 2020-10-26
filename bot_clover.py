@@ -26,11 +26,12 @@ class WebhookServer(object):
             json_string = cherrypy.request.body.read(length).decode("utf-8")
             update = telebot.types.Update.de_json(json_string)
             bot.process_new_updates([update])
+            print(length)
             return ''
         else:
             raise cherrypy.HTTPError(403)
 
-print(length)
+
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
