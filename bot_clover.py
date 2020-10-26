@@ -12,7 +12,7 @@ WEBHOOK_LISTEN = '0.0.0.0'
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (config.token)
 
-BOT_MAILBOX = 'http://193.33.179.204','http://173.192.101.194','http://178.62.47.76'
+BOT_MAILBOX = 'http://193.33.179.204'
 
 print('connecting_tg')
 
