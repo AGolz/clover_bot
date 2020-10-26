@@ -1,1 +1,1 @@
-web: Python3 bot_clover.py
+worker: Python3 bot_clover.py
