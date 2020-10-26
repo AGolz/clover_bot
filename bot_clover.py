@@ -10,7 +10,12 @@ WEBHOOK_LISTEN = '0.0.0.0'
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (config.token)
 
+print('connecting_tg')
+
 bot = telebot.TeleBot(config.token)
+
+print('bot started')
+
 class WebhookServer(object):
     @cherrypy.expose
     def index(self):
@@ -25,14 +30,17 @@ class WebhookServer(object):
         else:
             raise cherrypy.HTTPError(403)
 
+print(length)
 
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
+    print('request')
     bot.reply_to(message, message.text)
 
 bot.remove_webhook()
 
 bot.set_webhook(url=WEBHOOK_URL_BASE + WEBHOOK_URL_PATH)
+print(bot.set_webhook)
 
 cherrypy.config.update({
     'server.socket_host': WEBHOOK_LISTEN,
