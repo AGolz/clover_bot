@@ -23,8 +23,8 @@ print('bot started')
 
 
 class WebhookServer(object):
-@cherrypy.expose
-def BOT_MAILBOX(self):
+    @cherrypy.expose
+    def BOT_MAILBOX(self):
        if 'content-length' in cherrypy.request.headers and 'content-type' in cherrypy.request.headers and cherrypy.request.headers['content-type'] == 'application/json':
            length = int(cherrypy.request.headers['content-length'])
            json_string = cherrypy.request.body.read(length).decode("utf-8")
