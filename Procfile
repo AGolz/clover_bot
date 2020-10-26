@@ -1,1 +1,1 @@
-web: gunicorn -b :$PORT 'egg:meinheld#gunicorn_worker' bot_clover:app
+web: gunicorn -b :$PORT --worker-class='egg:meinheld#gunicorn_worker' bot_clover:app
