@@ -1,1 +1,1 @@
-worker: gunicorn bot_clover:application -b 0.0.0.0:$PORT 
+web: Python3 bot_clover.py
