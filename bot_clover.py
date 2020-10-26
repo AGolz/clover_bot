@@ -10,6 +10,8 @@ WEBHOOK_LISTEN = '0.0.0.0'
 WEBHOOK_URL_BASE = "https://%s:%s" % (WEBHOOK_HOST, WEBHOOK_PORT)
 WEBHOOK_URL_PATH = "/%s/" % (config.token)
 
+BOT_MAILBOX = 'https://botclover.herokuapp.com'
+
 print('connecting_tg')
 
 bot = telebot.TeleBot(config.token)
@@ -20,8 +22,8 @@ class WebhookServer(object):
     @cherrypy.expose
     def index(self):
         if 'content-length' in cherrypy.request.headers and \
-                        'content-type' in cherrypy.request.headers and \
-                        cherrypy.request.headers['content-type'] == 'application/json':
+            'content-type' in cherrypy.request.headers and \
+            cherrypy.request.headers['content-type'] == 'application/json':
             length = int(cherrypy.request.headers['content-length'])
             json_string = cherrypy.request.body.read(length).decode("utf-8")
             update = telebot.types.Update.de_json(json_string)
