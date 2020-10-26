@@ -1,2 +1,1 @@
-worker: python3 bot_clover.py runserver 0.0.0.0:5000
-web: python3 bot_clover.py runserver 0.0.0.0:5000
+web: gunicorn -b :$PORT --worker-class='egg:meinheld#gunicorn_worker' app:app
