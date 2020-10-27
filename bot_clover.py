@@ -9,7 +9,6 @@ import os
 import config
 
 
-
 WEBHOOK_HOST = 'botclover.herokuapp.com'
 WEBHOOK_LISTEN = "0.0.0.0"
 WEBHOOK_PORT = 8443 
@@ -47,7 +46,7 @@ def echo_message(message):
 
 
 bot.remove_webhook()
-time.sleep(3)
+time.sleep(1)
 
 print("WEBHOOK SETTING "+WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
 bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
