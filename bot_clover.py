@@ -1,13 +1,16 @@
-import config
-import telebot
-from aiohttp import web
+import logging
 import ssl
-from time import sleep
+
+from aiohttp import web
+
+import telebot
+
+import config
 
 
 WEBHOOK_HOST = 'botclover.herokuapp.com'
 WEBHOOK_LISTEN = "0.0.0.0"
-WEBHOOK_PORT = 8443
+WEBHOOK_PORT = 443
 
 API_TOKEN = config.token
 WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
@@ -18,6 +21,8 @@ bot = telebot.TeleBot(API_TOKEN)
 app = web.Application()
 
 async def handle(request):
+    print("WEBHOOK")
+    print(request)
     if request.match_info.get("token") == bot.token:
         request_body_dict = await request.json()
         update = telebot.types.Update.de_json(request_body_dict)
@@ -28,22 +33,24 @@ async def handle(request):
 
 app.router.add_post("/{token}/", handle)
 
-help_string = []
-help_string.append("*Some bot* - just a bot.\n\n")
-help_string.append("/start - greetings\n")
-help_string.append("/help - shows this help")
 
 
-@bot.message_handler(commands=["start"])
+@bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, "привет")
+    bot.reply_to(message, 'привет')
 
-@bot.message_handler(commands=["help"])
-def send_help(message):
-    bot.send_message(message.chat.id, "".join(help_string), parse_mode="Markdown")
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo_message(message):
+    bot.reply_to(message, message.text)
 
-sleep(1)
+
+bot.remove_webhook()
+
+print("WEBHOOK SETTING "+WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
 bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
+print("WEBHOOK SET")
+
+
 
 
 web.run_app(
