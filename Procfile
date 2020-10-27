@@ -1,1 +1,1 @@
-worker: python3 bot_clover.py -p 8443
+web: python3 bot_clover.py -p 8443
