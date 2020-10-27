@@ -42,9 +42,6 @@ def send_help(message):
     bot.send_message(message.chat.id, "".join(help_string), parse_mode="Markdown")
 
 
-context = ssl.SSLContext(ssl.PROTOCOL_TLSv1_2)
-context.load_cert_chain()
-
 web.run_app(
     app,
     host=WEBHOOK_LISTEN,
