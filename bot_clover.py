@@ -1,11 +1,13 @@
 import logging
 import ssl
+import time
 
 from aiohttp import web
 
 import telebot
 import os
 import config
+
 
 
 WEBHOOK_HOST = 'botclover.herokuapp.com'
@@ -45,6 +47,7 @@ def echo_message(message):
 
 
 bot.remove_webhook()
+time.sleep(3)
 
 print("WEBHOOK SETTING "+WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
 bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
