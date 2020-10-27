@@ -2,6 +2,7 @@ import config
 import telebot
 from aiohttp import web
 import ssl
+from time import sleep
 
 
 WEBHOOK_HOST = 'botclover.herokuapp.com'
@@ -40,6 +41,9 @@ def send_welcome(message):
 @bot.message_handler(commands=["help"])
 def send_help(message):
     bot.send_message(message.chat.id, "".join(help_string), parse_mode="Markdown")
+
+sleep(1)
+bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
 
 
 web.run_app(
