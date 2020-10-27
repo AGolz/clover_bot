@@ -1,1 +1,1 @@
-web: python3 bot_clover.py runserver 0.0.0.0:88
+web: python3 bot_clover.py runserver 0.0.0.0:8443 

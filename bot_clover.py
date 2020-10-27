@@ -10,7 +10,7 @@ import config
 
 WEBHOOK_HOST = 'botclover.herokuapp.com'
 WEBHOOK_LISTEN = "0.0.0.0"
-WEBHOOK_PORT = 88 
+WEBHOOK_PORT = 8443 
 
 API_TOKEN = config.token
 WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
