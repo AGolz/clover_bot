@@ -1,1 +1,1 @@
-worker: python3 bot_clover.py -p 443
+worker: python3 bot_clover.py -p 80
