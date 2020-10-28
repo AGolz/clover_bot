@@ -24,7 +24,7 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 def error(update, context):
-    logger.warning('Update %s" caused error "%s"', update, context.error)
+    logger.warning('Update "%s" caused error "%s" ', update, context.error)
 
 def main():
     updater = Updater(TOKEN, use_context=True)
