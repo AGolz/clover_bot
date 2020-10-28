@@ -54,7 +54,7 @@ class BotComm(object):
 if __name__ == "__main__":
     
     TOKEN = config.token
-    NAME = config.botclover
+    NAME = config.nameapp
 
     
     PORT = os.environ.get('PORT', 8443)
