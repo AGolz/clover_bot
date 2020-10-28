@@ -46,7 +46,7 @@ def echo_message(message):
 
 
 bot.remove_webhook()
-time.sleep()
+time.sleep(1)
 
 print("WEBHOOK SETTING "+WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
 bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
