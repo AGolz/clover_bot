@@ -1,38 +1,45 @@
-from telegram import Update
-from telegram.ext import Updater
 import logging
-from telegram.ext import CommandHandler
-import telebot
-import config
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import os
 
-TOKEN = config.token
 PORT = int(os.environ.get('PORT', '8443'))
 
-updater = Updater(TOKEN)
-dispatcher = updater.dispatcher
-
-
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                     level=logging.INFO)
+                    level=logging.INFO)
 
-def webhook(update):
-    update_queue.put(update)
+logger = logging.getLogger(__name__)
+TOKEN = config.token
+
 
 def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="привет")
-    
-start_handler = CommandHandler('start', start)
-dispatcher.add_handler(start_handler)
+    update.message.reply_text('привет')
 
 
+def echo(update, context):
+    update.message.reply_text(update.message.text)
+
+def error(update, context):
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+def main():
+    updater = Updater(TOKEN, use_context=True)
+
+    dp = updater.dispatcher
+
+    dp.add_handler(CommandHandler("start", start))
+    dp.add_handler(CommandHandler("help", help))
+
+   
+    dp.add_handler(MessageHandler(Filters.text, echo))
+
+    dp.add_error_handler(error)
 
 
-updater.start_webhook(listen="0.0.0.0",
+    updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
                       url_path=TOKEN)
-updater.bot.set_webhook('https://botclover.herokuapp.com/' + TOKEN)
-updater.idle()
+    updater.bot.set_webhook('https://botclover.herokuapp.com/' + TOKEN)
+    updater.idle()
 
-
-
+if __name__ == '__main__':
+    main()
