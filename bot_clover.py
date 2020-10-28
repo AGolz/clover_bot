@@ -24,21 +24,21 @@ def echo(update, context):
     update.message.reply_text(update.message.text)
 
 def error(update, context):
-    logger.warning('Update "%s" caused error "%s"', update, context.error)
+    logger.warning('Update %s" caused error "%s"', update, context.error)
 
 def main():
     updater = Updater(TOKEN, use_context=True)
     
     dp = updater.dispatcher
     
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("help", help))
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(CommandHandler('help', help))
     
     dp.add_handler(MessageHandler(Filters.text, echo))
     
     dp.add_error_handler(error)
 
-    updater.start_webhook(listen="0.0.0.0",
+    updater.start_webhook(listen='0.0.0.0',
                           port=PORT,
                           url_path=TOKEN)
     updater.bot.set_webhook('https://botclover.herokuapp.com/' + TOKEN)
