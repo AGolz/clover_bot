@@ -9,7 +9,7 @@ import os
 TOKEN = config.token
 PORT = int(os.environ.get('PORT', '8443'))
 
-updater = Updater(token='TOKEN')
+updater = Updater(TOKEN)
 dispatcher = updater.dispatcher
 
 
