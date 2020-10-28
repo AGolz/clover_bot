@@ -4,6 +4,7 @@ from queue import Queue
 
 import cherrypy
 import telegram
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
 import config 
