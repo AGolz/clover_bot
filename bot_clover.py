@@ -26,8 +26,6 @@ start_handler = CommandHandler('start', start)
 dispatcher.add_handler(start_handler)
 
 
-updater.start_polling()
-
 
 
 updater.start_webhook(listen="0.0.0.0",
