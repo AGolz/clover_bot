@@ -1,6 +1,8 @@
 import logging
 import ssl
 import time
+from telegram import Update
+from telegram.ext import Updater
 
 from aiohttp import web
 
