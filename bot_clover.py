@@ -5,19 +5,18 @@ import time
 from aiohttp import web
 
 import telebot
-import os
 import config
+import os
+
+TOKEN = config.token
+PORT = int(os.environ.get('PORT', '8443'))
+updater = Updater(TOKEN)
 
 
-WEBHOOK_HOST = 'botclover.herokuapp.com'
-WEBHOOK_LISTEN = "0.0.0.0"
-WEBHOOK_PORT = int(os.environ.get('PORT', '8443'))
+bot = telebot.TeleBot(TOKEN)
 
-API_TOKEN = config.token
-WEBHOOK_URL_BASE = "https://{}:{}".format(WEBHOOK_HOST, WEBHOOK_PORT)
-WEBHOOK_URL_PATH = "/{}/".format(API_TOKEN)
 
-bot = telebot.TeleBot(API_TOKEN)
+bot = telebot.TeleBot(TOKEN)
 
 app = web.Application()
 
@@ -45,18 +44,11 @@ def echo_message(message):
     bot.reply_to(message, message.text)
 
 
-bot.remove_webhook()
-time.sleep(1)
-
-print("WEBHOOK SETTING "+WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
-bot.set_webhook(url=WEBHOOK_URL_BASE+WEBHOOK_URL_PATH)
-print("WEBHOOK SET")
-
+updater.start_webhook(listen="0.0.0.0",
+                      port=PORT,
+                      url_path=TOKEN)
+updater.bot.set_webhook('https://botclover.herokuapp.com/' + TOKEN)
+updater.idle()
 
 
 
-web.run_app(
-    app,
-    host=WEBHOOK_LISTEN,
-    port=WEBHOOK_PORT,
-)
