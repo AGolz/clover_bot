@@ -1,30 +1,34 @@
-import logging
 from telegram import Update
 from telegram.ext import Updater
-
+import logging
+from telegram.ext import CommandHandler
 import telebot
 import config
 import os
 
 TOKEN = config.token
 PORT = int(os.environ.get('PORT', '8443'))
-updater = Updater(TOKEN)
+
+updater = Updater(token='TOKEN', use_context=True)
+dispatcher = updater.dispatcher
 
 
-bot = telebot.TeleBot(TOKEN)
-
-
-@bot.message_handler(commands=['help', 'start'])
-def send_welcome(message):
-    bot.reply_to(message, 'привет')
-
-@bot.message_handler(func=lambda message: True, content_types=['text'])
-def echo_message(message):
-    bot.reply_to(message, message.text)
-
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                     level=logging.INFO)
 
 def webhook(update):
     update_queue.put(update)
+
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="привет")
+    
+start_handler = CommandHandler('start', start)
+dispatcher.add_handler(start_handler)
+
+
+updater.start_polling()
+
+
 
 updater.start_webhook(listen="0.0.0.0",
                       port=PORT,
