@@ -41,7 +41,7 @@ class BotComm(object):
         self.dp.process_update(update)
 
     def _error(self, error):
-        cherrypy.log("Error occurred - {}".format(error))
+        cherrypy.log(["Error occurred - {}".format(error)])
 
     def _start(self, bot, update):
         update.effective_message.reply_text('Ку')
