@@ -44,9 +44,5 @@ def main():
     updater.bot.set_webhook('https://botclover.herokuapp.com/' + TOKEN)
     updater.idle()
 
-
-   
-    updater.idle()
-
 if __name__ == '__main__':
     main()
