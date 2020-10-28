@@ -40,7 +40,7 @@ class BotComm(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
 
-    def _error(self, error):
+    def dispatch_error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
     def _start(self, bot, update):
