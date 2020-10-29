@@ -30,25 +30,25 @@ class BotComm(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', self._start))
-        self.dp.add_handler(MessageHandler(Filters.text & Filters.command, self._echo))
-        self.dp.add_error_handler(self._error)
+        self.dp.add_handler(CommandHandler('start', self.dp_start))
+        self.dp.add_handler(MessageHandler(Filters.text & Filters.command, self.dp_echo))
+        self.dp.add_error_handler(self.dp_error)
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
-        update = cherrypy.request.json
-        update = telegram.Update.de_json(update, self.bot)
-        self.dp.process_update(update)
+        dp.update = cherrypy.request.json
+        dp.update = telegram.Update.de_json(dp.update, self.bot)
+        self.dp.process_update(dp.update)
 
-    def _error(self, error, update):
+    def dp_error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def _start(self, bot, update, context):
-        update.message.reply_text('Ку')
+    def dp_start(self, bot, update, context):
+        update.effective_message.reply_text('Ку')
 
 
-    def _echo(self, bot, update, context):
-        update.message.reply_text(update.message.text)
+    def dp_echo(self, bot, update, context):
+        update.effective_message.reply_text(update.message.text)
 
 
 if __name__ == '__main__':
