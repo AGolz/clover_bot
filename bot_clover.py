@@ -19,16 +19,17 @@ class Updater(object):
 
     def __init__(self, TOKEN, NAME):
         super(Updater, self).__init__()
+        self.updater = Updater(TOKEN, use_context = True)
         self.TOKEN = TOKEN
         self.NAME=NAME
-        self.bot = telegram.Bot(self.TOKEN)
+    
         try:
             self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError('Failed to set the webhook')
 
         self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue)
+        self.dp = dispatcher(self.updater, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self.dispatch_start))
         self.dp.add_handler(MessageHandler(Filters.text, self.dispatch_echo))
@@ -43,11 +44,11 @@ class Updater(object):
     def dispatch_error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def dispatch_start(self, bot, update):
+    def dispatch_start(self, updater, update):
         update.effective_message.reply_text('Ку')
 
 
-    def dispatch_echo(self, bot, update):
+    def dispatch_echo(self, updater, update):
         update.effective_message.reply_text(update.effective_message.text)
 
 
@@ -68,7 +69,7 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
-    cherrypy.tree.mount(Updater(TOKEN, NAME, use_context = True),
+    cherrypy.tree.mount(Updater(TOKEN, NAME),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
