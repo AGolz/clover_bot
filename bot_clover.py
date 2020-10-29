@@ -11,7 +11,7 @@ import config
 class SimpleWebsite(object):
     @cherrypy.expose
     def index(self):
-        return """<H1>Привет! Ищи меня в телеграм @Padraig_clover_bot ;)</H1>"""
+        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
 
 
 class BotComm(object):
@@ -36,6 +36,7 @@ class BotComm(object):
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
+        exposed = True
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
