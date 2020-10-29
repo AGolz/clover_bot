@@ -46,11 +46,10 @@ class BotComm(object):
         cherrypy.log('Error occurred - {}'.format(error))
 
     def _first(self, update, context):
-        context.chat_data['test'] = "this is a test"
         update.effective_message.reply_text("Ку")
         
     def second(self, update, context):
-      update.effective_message.reply_text(f"test is set to {context.chat_data.get('test', None)}")
+      update.effective_message.reply_text("test")
 
 
     def _echo(self, context):
