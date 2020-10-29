@@ -11,14 +11,14 @@ import config
 class SimpleWebsite(object):
     @cherrypy.expose
     def index(self):
-        return 
+        return return """<H1>Welcome!</H1>"""
 
 
-class BotComm(object):
+class Updater(object):
     exposed = True
 
     def __init__(self, TOKEN, NAME):
-        super(BotComm, self).__init__()
+        super(Updater, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
         self.bot = telegram.Bot(self.TOKEN)
@@ -68,7 +68,7 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
-    cherrypy.tree.mount(BotComm(TOKEN, NAME),
+    cherrypy.tree.mount(Updater(TOKEN, NAME, use_context = True),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
