@@ -19,7 +19,7 @@ class Updater(object):
 
     def __init__(self, TOKEN, NAME):
         super(Updater, self).__init__()
-        self.updater = Updater(TOKEN, use_context = True)
+        self.updater = Updater(TOKEN, use_context=True)
         self.TOKEN = TOKEN
         self.NAME=NAME
     
