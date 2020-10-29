@@ -6,7 +6,7 @@ import cherrypy
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
-import cost 
+import config 
 
 class SimpleWebsite(object):
     @cherrypy.expose
@@ -53,8 +53,8 @@ class BotComm(object):
 
 if __name__ == '__main__':
     
-    TOKEN = cost.token
-    NAME = cost.nameapp
+    TOKEN = config.token
+    NAME = config.nameapp
 
     
     PORT = os.environ.get('PORT', 8443)
