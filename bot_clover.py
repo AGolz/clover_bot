@@ -35,7 +35,7 @@ class BotComm(object):
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
-    def POST(self, *args, **kwargs):
+    def GET(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
