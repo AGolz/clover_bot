@@ -16,10 +16,10 @@ class Website(object):
 
 
 @cherrypy.tools.json_in()
-def POST():
+def POST(self, *args, **kwargs):
     update = cherrypy.request.json
-    update = telegram.Update.de_json(update, updater)
-    dp.process_update(update)
+    update = telegram.Update.de_json(update, main.bot)
+    main.dp.process_update(update)
 
 
 def dispatch_error(error, update):
