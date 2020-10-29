@@ -77,4 +77,4 @@ if __name__ == '__main__':
     cherrypy.tree.mount(BotComm(TOKEN, NAME),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
-    cherrypy.engine.first()
+    cherrypy.engine.start()
