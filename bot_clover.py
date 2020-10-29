@@ -3,7 +3,6 @@ import os
 import config 
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram import update
 
 
 
@@ -13,7 +12,7 @@ def start(bot, update, context):
 def echo(bot, update, context):
     update.effective_message.reply_text(update.effective_message.text)
 
-def error(bot, error, update):
+def dispatch_error(bot, update, error):
     logger.warning('Update "%s" caused error "%s"', update, error)
 
 
@@ -30,12 +29,12 @@ def  main ():
     logger = logging.getLogger(__name__)
 
 
-    updater = Updater(TOKEN)
+    updater = Updater(TOKEN, use_context=True)
     dp = updater.dispatcher
     
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(MessageHandler(Filters.text, echo))
-    dp.add_error_handler(error, update)
+    dp.add_error_handler(error)
 
     
     updater.start_webhook(listen="0.0.0.0",
