@@ -30,7 +30,7 @@ class BotComm(object):
         self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('first', self._first))
-        self.dp.add_handler(CommandHandler('second', self.second))
+        self.dp.add_handler(CommandHandler('second', self._second))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
         self.dp.add_error_handler(self._error)
 
