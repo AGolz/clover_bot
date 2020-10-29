@@ -1,76 +1,54 @@
 import logging
 import os
-from queue import Queue
-
 import cherrypy
 import telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
 import config 
 
-class SimpleWebsite(object):
-    @cherrypy.expose
-    def index(self):
-        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram import bot
+
+
+@cherrypy.tools.json_in()
+def POST(self):
+    update = cherrypy.request.json
+    update = telegram.Update.de_json(update, bot)
+    self.dp.process_update(update)
     
-class BotComm(object):
-    exposed = True
+    
+def start(update, context):
+    update.effective_message.reply_text("Ку")
+    
+    
 
-    def __init__(self, TOKEN, NAME):
-        super(BotComm, self).__init__()
-        self.TOKEN = TOKEN
-        self.NAME=NAME
-        self.bot = telegram.Bot(self.TOKEN)
-        try:
-            self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
-        except:
-            raise RuntimeError('Failed to set the webhook')
-
-        self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue)
-
-        self.dp.add_handler(CommandHandler('first', self._first))
-        self.dp.add_handler(CommandHandler('second', self._second))
-        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
-        self.dp.add_error_handler(self._error)
-
-    @cherrypy.tools.json_in()
-    def POST(self, *args, **kwargs):
-        update = cherrypy.request.json
-        update = telegram.Update.de_json(update, self.bot)
-        self.dp.process_update(update)
-
-    def _error(error, update):
-        cherrypy.log('Error occurred - {}'.format(error))
-
-    def _first(self, update, context):
-        update.effective_message.reply_text("Ку")
-        
-    def _second(self, update, context):
-        update.effective_message.reply_text("test")
-
-
-    def _echo(self, context):
-        update.effective_message.reply_text(update.effective_message.text)
-
-
-if __name__ == '__main__':
+def echo(update, context):
+    update.effective_message.reply_text(update.effective_message.text)
+    
+    
+def  main ():
     
     TOKEN = config.token
     NAME = config.nameapp
-
     PORT = os.environ.get('PORT', 8443)
-
     
+    bot = telegram.Bot(TOKEN)
+
+   
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
 
+    updater = Updater(TOKEN, use_context=True)
+    dp = updater.dispatcher
     
-    cherrypy.config.update({'server.socket_host': '0.0.0.0', })
-    cherrypy.config.update({'server.socket_port': int(PORT), })
-    cherrypy.tree.mount(SimpleWebsite(), "/")
-    cherrypy.tree.mount(BotComm(TOKEN, NAME),
-                        "/{}".format(TOKEN),
-                        {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
-    cherrypy.engine.start()
+    dp.add_handler(CommandHandler('start', start))
+    dp.add_handler(MessageHandler(Filters.text, echo))
+    
+    updater.start_webhook(listen="0.0.0.0",
+                          port=int(PORT),
+                          url_path=TOKEN)
+    updater.bot.setWebhook("https://{}.herokuapp.com/{}".format(NAME, TOKEN))
+    updater.idle()
+    
+if __name__ == '__main__':
+    main()
