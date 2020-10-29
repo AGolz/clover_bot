@@ -8,13 +8,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispa
 
 import cost 
        
-TOKEN = cost.token
-NAME = cost.nameapp
-PORT = os.environ.get('PORT', 8443)
 class Website(object):
     @cherrypy.expose
     def index(self):
-        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
+        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""  
     
         
 def dispatch_error(error, update):
@@ -34,11 +31,8 @@ def main():
     @cherrypy.tools.json_in()
     def POST():
         update = cherrypy.request.json
-        update = telegram.Update.de_json(update, main.bot)
-        main.dp.process_update(update) 
-        
-        
-    bot = telegram.Bot(TOKEN)  
+        update = telegram.Update.de_json(update, bot)
+        dp.process_update(update) 
     
     try:
         bot.setWebhook('https://{}.herokuapp.com/{}'.format(NAME,TOKEN))
@@ -55,6 +49,10 @@ def main():
     dp.add_error_handler(dispatch_error)
 
 
+TOKEN = cost.token
+NAME = cost.nameapp
+PORT = os.environ.get('PORT', 8443)
+bot = telegram.Bot(TOKEN)
 
 if __name__ == '__main__':
     
