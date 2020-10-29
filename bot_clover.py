@@ -11,7 +11,7 @@ import config
 class SimpleWebsite(object):
     @cherrypy.expose
     def index(self):
-        return return """<H1>Welcome!</H1>"""
+        return """<H1>Welcome!</H1>"""
 
 
 class Updater(object):
