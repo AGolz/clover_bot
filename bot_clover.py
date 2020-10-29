@@ -28,11 +28,10 @@ class BotComm(object):
             raise RuntimeError('Failed to set the webhook')
 
         self.update_queue = Queue()
-        self.updater = Updater(TOKEN, use_context=True)
         self.dp = updater.Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self._start))
-        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
+        self.dp.add_handler(MessageHandler(Filters.text & Filters.command, self._echo))
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
@@ -44,12 +43,12 @@ class BotComm(object):
     def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def _start(self, bot, update):
-        update.effective_message.reply_text('Ку')
+    def _start(self, bot, update, context):
+        update.message.reply_text('Ку')
 
 
-    def _echo(self, bot, update):
-        update.effective_message.reply_text(update.effective_message.text)
+    def _echo(self, bot, update, context):
+        update.message.reply_text(update.message.text)
 
 
 if __name__ == '__main__':
