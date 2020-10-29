@@ -15,7 +15,7 @@ class SimpleWebsite(object):
 
 
 class BotComm(object):
-    exposed = True
+    BotComm.exposed = True
 
     def __init__(self, TOKEN, NAME):
         super(BotComm, self).__init__()
@@ -35,10 +35,11 @@ class BotComm(object):
         self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
-    def GET(self, *args, **kwargs):
+    def POST(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
+        POST.exposed = True
 
     def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
