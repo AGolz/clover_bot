@@ -30,7 +30,8 @@ class BotComm(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', self._start))
+        self.dp.add_handler(CommandHandler('first', self._first))
+        self.dp.add_handler(CommandHandler('second', self.second))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
         self.dp.add_error_handler(self._error)
 
@@ -44,11 +45,15 @@ class BotComm(object):
     def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def _start(self, bot, update):
-        update.effective_message.reply_text('Ку')
+    def _first(self, update, context):
+        context.chat_data['test'] = "this is a test"
+        update.effective_message.reply_text("Ку")
+        
+    def second(self, update, context):
+      update.effective_message.reply_text(f"test is set to {context.chat_data.get('test', None)}")
 
 
-    def _echo(self, bot, update):
+    def _echo(self, context):
         update.effective_message.reply_text(update.effective_message.text)
 
 
@@ -72,4 +77,4 @@ if __name__ == '__main__':
     cherrypy.tree.mount(BotComm(TOKEN, NAME),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
-    cherrypy.engine.start()
+    cherrypy.engine.first()
