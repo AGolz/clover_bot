@@ -34,8 +34,11 @@ def echo(updater, update, context):
 def main():
     main.exposed = True
     
-    TOKEN = TOKEN
-    NAME=NAME
+    TOKEN = cost.token
+    NAME = cost.nameapp
+   
+    PORT = os.environ.get('PORT', 8443)
+  
     bot = telegram.Bot(TOKEN)
     
     try:
@@ -55,11 +58,6 @@ def main():
 
 
 if __name__ == '__main__':
-    
-    TOKEN = cost.token
-    NAME = cost.nameapp
-   
-    PORT = os.environ.get('PORT', 8443)
     
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
