@@ -43,11 +43,11 @@ class BotComm(object):
     def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def _start(self, bot, update):
+    def _start(self, bot, update, use_context=True):
         update.effective_message.reply_text('Ку')
 
 
-    def _echo(self, bot, update):
+    def _echo(self, bot, update, use_context=True):
         update.effective_message.reply_text(update.effective_message.text)
 
 
