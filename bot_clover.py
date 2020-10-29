@@ -14,22 +14,24 @@ class SimpleWebsite(object):
         return """<H1>Welcome!</H1>"""
 
 
-class Updater(object):
+class BotComm(object):
     exposed = True
 
     def __init__(self, TOKEN, NAME):
-        super(Updater, self).__init__()
-        self.updater = Updater(TOKEN, use_context=True)
+        super(BotComm, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
+        self.bot = telegram.Bot(self.TOKEN)
     
         try:
             self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError('Failed to set the webhook')
+        
+        self.updater = Updater(TOKEN, use_context=True)
 
         self.update_queue = Queue()
-        self.dp = dispatcher(self.updater, self.update_queue)
+        self.dp = Dispatcher(self.updater, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self.dispatch_start))
         self.dp.add_handler(MessageHandler(Filters.text, self.dispatch_echo))
@@ -69,7 +71,7 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(SimpleWebsite(), "/")
-    cherrypy.tree.mount(Updater(TOKEN, NAME),
+    cherrypy.tree.mount(BotComm(TOKEN, NAME),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
