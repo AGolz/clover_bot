@@ -7,8 +7,10 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
 import cost 
-
-
+       
+TOKEN = cost.token
+NAME = cost.nameapp
+PORT = os.environ.get('PORT', 8443)
 class Website(object):
     @cherrypy.expose
     def index(self):
@@ -33,12 +35,7 @@ def echo(updater, update, context):
 
 def main():
     main.exposed = True
-    
-    TOKEN = cost.token
-    NAME = cost.nameapp
-   
-    PORT = os.environ.get('PORT', 8443)
-  
+
     bot = telegram.Bot(TOKEN)
     
     try:
