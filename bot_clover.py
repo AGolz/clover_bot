@@ -6,10 +6,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
 
-def start(bot, update, context):
+def start(update, context):
     update.effective_message.reply_text("Ку")
 
-def echo(bot, update, context):
+def echo(update, context):
     update.effective_message.reply_text(update.effective_message.text)
 
 
