@@ -15,7 +15,7 @@ class SimpleWebsite(object):
 
 
 class BotComm(object):
-    BotComm.exposed = True
+    exposed = True
 
     def __init__(self, TOKEN, NAME):
         super(BotComm, self).__init__()
