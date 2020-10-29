@@ -6,9 +6,9 @@ import cherrypy
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
-import cost
+import config 
 
-class Website(object):
+class SimpleWebsite(object):
     @cherrypy.expose
     def index(self):
         return """<H1>Привет! Ищи меня в телеграм @Padraig_clover_bot ;)</H1>"""
@@ -22,20 +22,17 @@ class BotComm(object):
         self.TOKEN = TOKEN
         self.NAME=NAME
         self.bot = telegram.Bot(self.TOKEN)
-    
         try:
             self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError('Failed to set the webhook')
-        
-        self.updater = Updater(TOKEN, use_context=True)
 
         self.update_queue = Queue()
-        self.dp = Dispatcher(self.updater, self.update_queue)
+        self.dp = Dispatcher(self.bot, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', lambda start: True))
-        self.dp.add_handler(MessageHandler(Filters.text & ~Filters.command, lambda echo: True))
-        self.dp.add_error_handler(self.dispatch_error)
+        self.dp.add_handler(CommandHandler('start', self._start))
+        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
+        self.dp.add_error_handler(self._error)
 
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
@@ -43,22 +40,23 @@ class BotComm(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
 
-    def dispatch_error(self, error, update):
+    def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def start(self, update, context):
+    def _start(self, bot, update):
         update.effective_message.reply_text('Ку')
 
 
-    def echo(self, update, context):
+    def _echo(self, bot, update):
         update.effective_message.reply_text(update.effective_message.text)
 
 
 if __name__ == '__main__':
     
-    TOKEN = cost.token
-    NAME = cost.nameapp
+    TOKEN = config.token
+    NAME = config.nameapp
 
+    
     PORT = os.environ.get('PORT', 8443)
 
     
@@ -69,7 +67,7 @@ if __name__ == '__main__':
     
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
-    cherrypy.tree.mount(Website(), "/")
+    cherrypy.tree.mount(SimpleWebsite(), "/")
     cherrypy.tree.mount(BotComm(TOKEN, NAME),
                         "/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
