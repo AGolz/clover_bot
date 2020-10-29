@@ -29,7 +29,7 @@ def main():
     exposed = True
     
     @cherrypy.tools.json_in()
-    def POST():
+    def POST(main):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, bot)
         dp.process_update(update) 
