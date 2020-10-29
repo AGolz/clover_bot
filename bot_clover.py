@@ -33,8 +33,8 @@ class BotComm(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.updater, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', self.dispatch_start))
-        self.dp.add_handler(MessageHandler(Filters.text, self.dispatch_echo))
+        self.dp.add_handler(CommandHandler('start', self.start))
+        self.dp.add_handler(MessageHandler(Filters.text & ~Filters.command, self.echo))
         self.dp.add_error_handler(self.dispatch_error)
 
     @cherrypy.tools.json_in()
@@ -46,11 +46,11 @@ class BotComm(object):
     def dispatch_error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
 
-    def dispatch_start(self, updater, update):
+    def start(self, updater, update):
         update.effective_message.reply_text('Ку')
 
 
-    def dispatch_echo(self, updater, update):
+    def echo(self, updater, update):
         update.effective_message.reply_text(update.effective_message.text)
 
 
