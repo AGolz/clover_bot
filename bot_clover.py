@@ -39,7 +39,6 @@ class BotComm(object):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
-        POST.exposed = True
 
     def _error(self, error, update):
         cherrypy.log('Error occurred - {}'.format(error))
