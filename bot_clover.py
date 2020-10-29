@@ -28,7 +28,7 @@ class BotComm(object):
             raise RuntimeError('Failed to set the webhook')
 
         self.update_queue = Queue()
-        self.updater = Updater("TOKEN", use_context=True)
+        self.updater = Updater(TOKEN, use_context=True)
         self.dp = updater.Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self._start))
