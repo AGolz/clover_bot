@@ -16,11 +16,6 @@ class Website(object):
     def index(self):
         return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
     
-@cherrypy.tools.json_in()
-def POST(main, *args, **kwargs):
-        update = cherrypy.request.json
-        update = telegram.Update.de_json(update, main.bot)
-        main.dp.process_update(update)   
         
 def dispatch_error(error, update):
     cherrypy.log('Error occurred - {}'.format(error))
@@ -34,9 +29,16 @@ def echo(updater, update, context):
     
 
 def main():
-    main.exposed = True
-
-    bot = telegram.Bot(TOKEN)
+    exposed = True
+    
+    @cherrypy.tools.json_in()
+    def POST():
+        update = cherrypy.request.json
+        update = telegram.Update.de_json(update, main.bot)
+        main.dp.process_update(update) 
+        
+        
+    bot = telegram.Bot(TOKEN)  
     
     try:
         bot.setWebhook('https://{}.herokuapp.com/{}'.format(NAME,TOKEN))
