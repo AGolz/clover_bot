@@ -45,7 +45,7 @@ class Root_bot(object):
     def _start(self, update, bot):
         update.effective_message.reply_text("Ку")
             
-    def _echo(self, update, context):
+    def _echo(self, update, bot):
         update.effective_message.reply_text(update.message.text)
         
     def _error(self, update, error):
