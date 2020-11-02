@@ -44,7 +44,7 @@ class Root_bot(object):
         self.dp.process_update(update)
         
     def start(self, TOKENupdate : Update, context : CallbackContext):
-        update.effective_message.reply_text("Ку")
+        Update.effective_message.reply_text("Ку")
             
     def echo(self, update : Update, context : CallbackContext):
         update.effective_message.reply_text(update.effective_message.text)
