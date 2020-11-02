@@ -49,7 +49,7 @@ class Root_bot(object):
     def echo(update : Update, context : CallbackContext):
         update.effective_message.reply_text(update.effective_message.text)
         
-    def error_callback(update: Update, context: CallbackContext):
+    def error_callback(self, update, context):
         cherrypy.log("Error occurred - {}".format(context))
         
     
