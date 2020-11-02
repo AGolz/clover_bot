@@ -46,7 +46,7 @@ class Root_bot(object):
         update.message.reply_text("Ку")
             
     def _echo(self, update, context):
-        update.message.reply_text(update.message.text)
+        update.effective_message.reply_text(update.message.text)
         
     def _error(self, update, error):
         cherrypy.log('Error occurred - {}'.format(error))
@@ -67,7 +67,7 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(Website(), "/", {})
-    cherrypy.tree.mount(Root_bot(TOKEN, NAME), "/" + TOKEN, {'/': {'request.dispatch': 
+    cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
     cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
 
