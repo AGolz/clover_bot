@@ -1,7 +1,6 @@
 import logging
 import os
 
-import cherrypy
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 
@@ -12,13 +11,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
                     level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-
-class Website(object):
-    @cherrypy.expose
-    def index(self):
-        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
-    index.exposed = True
-    
+   
     
 def caps(update, context):
     text_caps = ' '.join(context.args).upper()
@@ -70,12 +63,7 @@ def main():
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(echo_handler)
     dispatcher.add_handler(unknown_handler)
-    
-    cherrypy.config.update({'server.socket_host': '0.0.0.0', })
-    cherrypy.config.update({'server.socket_port': int(PORT), })
-    cherrypy.tree.mount(Website(), "/", {})
-    
-    cherrypy.engine.start()
+
     updater.start_polling()
     
 
