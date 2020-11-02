@@ -22,7 +22,7 @@ class Root_bot(object):
         super(Root_bot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
-        self.bot = telegram.Bot(self.TOKEN)
+        self.bot = telegram.Bot(TOKEN)
         
         try:
             self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
