@@ -4,6 +4,7 @@ from queue import Queue
 
 import cherrypy
 import telegram
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher
 
 import config 
@@ -42,13 +43,13 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def _start(self, update: Update, context: CallbackContext):
+    def _start(update: Update, context: CallbackContext):
         update.effective_message.reply_text("Ку")
             
-    def _echo(self, update: Update, context: CallbackContext):
+    def _echo(update: Update, context: CallbackContext):
         update.effective_message.reply_text(update.effective_message.text)
         
-    def _error_callback(self, update, context):
+    def _error_callback(update, context):
         cherrypy.log("Error occurred - {}".format(context.error))
         
     
