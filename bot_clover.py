@@ -48,7 +48,7 @@ class Root_bot(object):
     def _echo(self, bot, update):
         update.effective_message.reply_text(update.effective_message.text)
         
-    def _error(self, error):
+    def _error(self, error, update):
         cherrypy.log("Error occurred - {}".format(error))
         
     
