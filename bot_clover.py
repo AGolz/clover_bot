@@ -1,7 +1,7 @@
 import logging
 import os
 
-from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 
 import config 
@@ -33,36 +33,26 @@ def inline_caps(update, context):
     context.bot.answer_inline_query(update.inline_query.id, results)
     
     
-def start(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="Ку") 
+def start(update: Update, context: CallbackContext):
+    update.effective_message.reply_text('Ку!')
     
     
-def echo(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+def echo(update: Update, context: CallbackContext): 
+    update.message.reply_text(update.message.text)
 
     
-def unknown(update, context):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="такой команды нет")
     
        
 def main():
-    PORT = os.environ.get('PORT')
-    updater = Updater(token=config.token)
+    updater = Updater(token=config.token, use_context=True)
     dispatcher = updater.dispatcher
     
-    caps_handler = CommandHandler('caps', caps)
-    inline_caps_handler = InlineQueryHandler(inline_caps)
+    dispatcher.add_handler(CommandHandler('caps', caps))
+    dispatcher.add_handler(InlineQueryHandler(inline_caps))
     
-    start_handler = CommandHandler('start', start)
-    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
-    unknown_handler = MessageHandler(Filters.command, unknown)
+    dispatcher.add_handler(CommandHandler("start", start))
+    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
     
-    dispatcher.add_handler(caps_handler)
-    dispatcher.add_handler(inline_caps_handler)
-    
-    dispatcher.add_handler(start_handler)
-    dispatcher.add_handler(echo_handler)
-    dispatcher.add_handler(unknown_handler)
 
     updater.start_polling()
     
