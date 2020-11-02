@@ -30,7 +30,7 @@ class Root_bot(object):
             raise RuntimeError('Failed to set the webhook')
 
         self.update_queue = Queue()
-        self.updater = Updater(TOKEN, use_context=True)
+        self.updater = Updater(TOKEN)
         self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self._start))
@@ -63,11 +63,13 @@ if __name__ == '__main__':
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
     
+    
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
-    cherrypy.config.update({'server.socket_port': int(PORT), })
-    cherrypy.tree.mount(Website(), "/", config=None)
-    cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),
-                        {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
+    cherrypy.config.update({'server.socket_port': int(PORT, '5000'), })
+    cherrypy.tree.mount(Website(), "/", {})
+    cherrypy.tree.mount(Root_bot(), "/" + TOKEN, {'/': {'request.dispatch': 
+    cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
+
     
     
