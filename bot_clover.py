@@ -22,7 +22,7 @@ class Root_bot(object):
         super(Root_bot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
-        self.bot = telegram.Bot('TOKEN')
+        self.bot = telegram.Bot(TOKEN)
         
         try:
             self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
@@ -54,7 +54,7 @@ class Root_bot(object):
     
 if __name__ == '__main__':
     
-    TOKEN = config.token
+    TOKEN = 'config.token'
     NAME = config.nameapp
     
     PORT = os.environ.get('PORT', 8443)
