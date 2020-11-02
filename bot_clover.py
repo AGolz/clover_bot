@@ -30,7 +30,7 @@ class Root_bot(object):
             raise RuntimeError("Failed to set the webhook")
 
         self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue)
+        self.dp = Dispatcher(self.update_queue, use_context=True)
 
         self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
@@ -42,13 +42,13 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def _start(self, bot, update):
+    def _start(self, update, context):
         update.effective_message.reply_text("Ку")
             
-    def _echo(self, bot, update):
-        update.callback_query.message.reply_text(update.callback_query.message.reply_text)
+    def _echo(self, update, context):
+        update.effective_message.reply_text(update.effective_message.text)
         
-    def _error(self, error, update):
+    def _error(self, context, update):
         cherrypy.log("Error occurred - {}".format(error))
         
     
