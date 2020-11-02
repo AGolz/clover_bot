@@ -43,10 +43,10 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def start(update : Update , context : CallbackContext):
+    def start(update : Update, context : CallbackContext):
         update.effective_message.reply_text("Ку")
             
-    def echo(update : Update , context : CallbackContext):
+    def echo(update : Update, context : CallbackContext):
         update.effective_message.reply_text(update.effective_message.text)
         
     def error_callback(update: Update, context: CallbackContext):
