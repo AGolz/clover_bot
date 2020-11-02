@@ -2,7 +2,7 @@ import logging
 import os
 
 from telegram import InlineQueryResultArticle, InputTextMessageContent, Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler, CallbackContext
 
 import config 
 
