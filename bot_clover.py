@@ -12,6 +12,7 @@ class Website(object):
     @cherrypy.expose
     def index(self):
         return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
+    index.exposed = True
     
     
 class Root_bot(object):
@@ -29,7 +30,8 @@ class Root_bot(object):
             raise RuntimeError('Failed to set the webhook')
 
         self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue)
+        self.updater = Updater(TOKEN, use_context=True)
+        self.dp = updater.dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self._start))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
@@ -63,7 +65,7 @@ if __name__ == '__main__':
     
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
-    cherrypy.tree.mount(Website(), "/")
+    cherrypy.tree.mount(Website(), "/", config=None)
     cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),
                         {'/': {'request.dispatch': cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
