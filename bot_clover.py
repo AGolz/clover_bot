@@ -41,6 +41,7 @@ class Root_bot(object):
     def POST(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
+        self.dp.process_update(update)
         
     def _start(self, update, context):
         update.message.reply_text("Ку")
@@ -65,7 +66,7 @@ if __name__ == '__main__':
     
     
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
-    cherrypy.config.update({'server.socket_port': int(PORT, '5000'), })
+    cherrypy.config.update({'server.socket_port': int(PORT, 8443), })
     cherrypy.tree.mount(Website(), "/", {})
     cherrypy.tree.mount(Root_bot(), "/" + TOKEN, {'/': {'request.dispatch': 
     cherrypy.dispatch.MethodDispatcher()}})
