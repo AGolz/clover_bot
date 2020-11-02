@@ -54,7 +54,7 @@ class Root_bot(object):
     
 if __name__ == '__main__':
     
-    TOKEN = 'config.token'
+    TOKEN = config.token
     NAME = config.nameapp
     
     PORT = os.environ.get('PORT', 8443)
