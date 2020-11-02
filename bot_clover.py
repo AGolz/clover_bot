@@ -31,7 +31,7 @@ class Root_bot(object):
 
         self.update_queue = Queue()
         self.updater = Updater(TOKEN, use_context=True)
-        self.dp = updater.dispatcher(self.bot, self.update_queue)
+        self.dp = Dispatcher(self.bot, self.update_queue)
 
         self.dp.add_handler(CommandHandler('start', self._start))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
