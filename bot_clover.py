@@ -43,11 +43,11 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def start(self, TOKENupdate : Update, context : CallbackContext):
+    def start(update : Update, context : CallbackContext):
         Update.effective_message.reply_text("Ку")
             
-    def echo(self, update : Update, context : CallbackContext):
-        update.effective_message.reply_text(update.effective_message.text)
+    def echo(update : Update, context : CallbackContext):
+        Update.effective_message.reply_text(update.effective_message.text)
         
     def error_callback(self, context, update):
         cherrypy.log("Error occurred - {}".format(context))
