@@ -22,17 +22,17 @@ class Root_bot(object):
         super(Root_bot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
-        self.bot = telegram.Bot(TOKEN)
+        self.bot = telegram.Bot(self.TOKEN)
         
         try:
-            self.bot.setWebhook('https://{}.herokuapp.com/{}'.format(self.NAME, self.TOKEN))
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
         except:
-            raise RuntimeError('Failed to set the webhook')
+            raise RuntimeError("Failed to set the webhook")
 
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', self._start))
+        self.dp.add_handler(CommandHandler("start", self._start))
         self.dp.add_handler(MessageHandler(Filters.text, self._echo))
         self.dp.add_error_handler(self._error)
         
@@ -46,10 +46,10 @@ class Root_bot(object):
         update.effective_message.reply_text("Ку")
             
     def _echo(self, update, bot):
-        update.effective_message.reply_text(update.message.text)
+        update.effective_message.reply_text(update.effective_message.text)
         
     def _error(self, update, error):
-        cherrypy.log('Error occurred - {}'.format(error))
+        cherrypy.log("Error occurred - {}".format(error))
         
     
 if __name__ == '__main__':
@@ -57,7 +57,7 @@ if __name__ == '__main__':
     TOKEN = config.token
     NAME = config.nameapp
     
-    PORT = os.environ.get('PORT', 8443)
+    PORT = os.environ.get('PORT')
  
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)
