@@ -44,10 +44,10 @@ class Root_bot(object):
         self.dp.process_update(update)
         
     def start(update : Update, context : CallbackContext):
-        update.effective_message.reply_text("Ку")
+        update.message.reply_text("Ку")
             
     def echo(update : Update, context : CallbackContext):
-        update.effective_message.reply_text(update.effective_message.text)
+        update.message.reply_text(update.message.text)
         
     def error_callback(self, context, update):
         cherrypy.log("Error occurred - {}".format(context))
