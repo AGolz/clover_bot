@@ -31,8 +31,8 @@ class Root_bot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue)
 
-        self.dp.add_handler(CommandHandler('start', _start))
-        self.dp.add_handler(MessageHandler(Filters.text, _echo))
+        self.dp.add_handler(CommandHandler('start', self._start))
+        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
         self.dp.add_error_handler(self._error)
         
     @cherrypy.tools.json_in()
