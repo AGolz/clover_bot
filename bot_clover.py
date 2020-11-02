@@ -42,7 +42,7 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def _start(self, update):
+    def _start(self, bot, update):
         update.effective_message.reply_text("Ку")
             
     def _echo(self, update, context):
