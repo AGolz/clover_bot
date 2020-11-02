@@ -68,7 +68,7 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(Website(), "/", {})
-    cherrypy.tree.mount(Root_bot(), "/" + TOKEN, {'/': {'request.dispatch': 
+    cherrypy.tree.mount(Root_bot(TOKEN, NAME), "/" + TOKEN, {'/': {'request.dispatch': 
     cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
 
