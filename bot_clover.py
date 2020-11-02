@@ -33,9 +33,9 @@ class Root_bot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
 
-        self.dp.add_handler(CommandHandler("start", self._start))
-        self.dp.add_handler(MessageHandler(Filters.text, self._echo))
-        self.dp.add_error_handler(self._error_callback)
+        self.dp.add_handler(CommandHandler("start", self.start))
+        self.dp.add_handler(MessageHandler(Filters.text, self.echo))
+        self.dp.add_error_handler(self.error_callback)
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
@@ -43,14 +43,14 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         
-    def _start(self, update : Update , context : CallbackContext):
+    def start(update : Update , context : CallbackContext):
         update.effective_message.reply_text("Ку")
             
-    def _echo(self, update : Update , context : CallbackContext):
+    def echo(update : Update , context : CallbackContext):
         update.effective_message.reply_text(update.effective_message.text)
         
-    def _error_callback(context, update):
-        cherrypy.log("Error occurred - {}".format(context))
+    def error_callback(update: Update, context: CallbackContext):
+        cherrypy.log("Error occurred - {}".format(context.error))
         
     
 if __name__ == '__main__':
