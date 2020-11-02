@@ -1,13 +1,17 @@
 import logging
 import os
-from queue import Queue
 
 import cherrypy
-import telegram
-from telegram import Update, update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher, CallbackQueryHandler, CallbackContext
+from telegram import InlineQueryResultArticle, InputTextMessageContent
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, InlineQueryHandler
 
 import config 
+
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                    level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 class Website(object):
     @cherrypy.expose
@@ -16,61 +20,66 @@ class Website(object):
     index.exposed = True
     
     
-class Root_bot(object):
-    exposed = True
-
-    def __init__(self, TOKEN, NAME):
-        super(Root_bot, self).__init__()
-        self.TOKEN = TOKEN
-        self.NAME=NAME
-        self.bot = telegram.Bot(self.TOKEN)
-        
-        try:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
-        except:
-            raise RuntimeError("Failed to set the webhook")
-
-        self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
-
-        self.dp.add_handler(CommandHandler("start", self.start))
-        self.dp.add_handler(MessageHandler(Filters.text, self.echo))
-        self.dp.add_error_handler(self.error_callback)
-        
-    @cherrypy.tools.json_in()
-    def POST(self, *args, **kwargs):
-        update = cherrypy.request.json
-        update = telegram.Update.de_json(update, self.bot)
-        self.dp.process_update(update)
-        
-    def start(update : Update, context : CallbackContext):
-        update.message.reply_text("Ку")
-            
-    def echo(update : Update, context : CallbackContext):
-        update.message.reply_text(update.message.text)
-        
-    def error_callback(self, context, update):
-        cherrypy.log("Error occurred - {}".format(context))
-        
+def caps(update, context):
+    text_caps = ' '.join(context.args).upper()
+    context.bot.send_message(chat_id=update.effective_chat.id, text=text_caps)
     
-if __name__ == '__main__':
     
-    TOKEN = config.token
-    NAME = config.nameapp
+def inline_caps(update, context):
+    query = update.inline_query.query
+    if not query:
+        return
+    results = list()
+    results.append(
+        InlineQueryResultArticle(
+            id=query.upper(),
+            title='Caps',
+            input_message_content=InputTextMessageContent(query.upper())
+        )
+    )
+    context.bot.answer_inline_query(update.inline_query.id, results)
     
+    
+def start(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Ку") 
+    
+    
+def echo(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text=update.message.text)
+
+    
+def unknown(update, context):
+    context.bot.send_message(chat_id=update.effective_chat.id, text="такой команды нет")
+    
+       
+def main():
     PORT = os.environ.get('PORT')
- 
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                        level=logging.INFO)
-    logger = logging.getLogger(__name__)
+    updater = Updater(token=config.token)
+    dispatcher = updater.dispatcher
     
+    caps_handler = CommandHandler('caps', caps)
+    inline_caps_handler = InlineQueryHandler(inline_caps)
+    
+    start_handler = CommandHandler('start', start)
+    echo_handler = MessageHandler(Filters.text & (~Filters.command), echo)
+    unknown_handler = MessageHandler(Filters.command, unknown)
+    
+    dispatcher.add_handler(caps_handler)
+    dispatcher.add_handler(inline_caps_handler)
+    
+    dispatcher.add_handler(start_handler)
+    dispatcher.add_handler(echo_handler)
+    dispatcher.add_handler(unknown_handler)
     
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(Website(), "/", {})
-    cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
-    cherrypy.dispatch.MethodDispatcher()}})
+    
     cherrypy.engine.start()
+    updater.start_polling()
+    
 
+if __name__ == '__main__':
+    main()
     
     
