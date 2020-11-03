@@ -40,8 +40,8 @@ class Root_bot(object):
     def POST(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
+        self.dp.process_update(update)
         print(update)
-        
         
     def start(self, update : Update, context : CallbackContext):
         update.effective_message.reply_text("Ку")
