@@ -35,14 +35,7 @@ class Root_bot(object):
  
         self.dp.add_handler(CommandHandler("start", self.start))
         self.dp.add_handler(MessageHandler(Filters.text, self.echo))
-        self.dp.add_error_handler(self.error_callback)
         
-    @cherrypy.tools.json_in()
-    def POST(self, *args, **kwargs):
-        update = cherrypy.request.json
-        update = telegram.Update.de_json(update, self.bot)
-        print(update)
-        self.dp.process_update(update)
         
     def start(update : Update, context : CallbackContext):
         print(context)
@@ -52,8 +45,6 @@ class Root_bot(object):
         print(context)
         update.effective_message.reply_text(update.message.text)
         
-    def error_callback(self, context, update):
-        cherrypy.log("Error occurred - {}".format(context))
         
     
 if __name__ == '__main__':
