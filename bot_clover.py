@@ -1,37 +1,52 @@
-import logging
-
-from telegram import Update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+import requests  
+import datetime
 
 import config 
 
+token = config.token 
+class botHandler:
+    def __init__(self, token = token):
+        self.token = config.token
+        self.apiURL = "https://api.telegram.org/bot{}/".format(token)
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
-)
+    def get_updates(self, offset = None, timeout = 30):
+        params = {'timeout':timeout, 'offset':offset}
+        method = 'getUpdates'
+        response = requests.get(self.apiURL + method, data=params)
+        respJson = response.json()['result']
+        return respJson
 
-logger = logging.getLogger(__name__)
+    def get_last_update(self):
+        result = self.getUpdates()
+        if len(result) > 0:
+            updateLast = result[-1]
+        else:
+            updateLast = result[len(result)]
+        return updateLast
 
+    def get_chat_id(update):
+        chatID = update['message']['chat']['id']
+        return chatID
 
-def start(update: Update, context: CallbackContext):
-    update.message.reply_text('Ку')
-
-
-def echo(update: Update, context: CallbackContext):
-    update.message.reply_text(update.message.text)
-
+    def send_message(self, chatID, text):
+        params = {'chat_id': chatID, 'text': text}
+        method = 'sendMessage'
+        response = requests.post(self.apiURL + method, data=params)
+        return response
 
 def main():
-    updater = Updater(config.token, use_context=True)
-    dispatcher = updater.dispatcher
+    bot = botHandler(token)
     
-    dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    off_set_next = None
+    bot.get_updates(off_set_next)
     
-    updater.start_polling()
-    updater.idle()
-
+    last_update = bot.get_last_update()
+    last_update_id = last_update['update_id']
+    last_chat_id = last_update_id['message']['chat']['id']
+    bot.send_message(last_chat_id, 'Ky')
 
 if __name__ == '__main__':
-    main()
-    
+    try:
+        main()
+    except KeyboardInterrupt:
+        exit()
