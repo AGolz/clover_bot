@@ -4,26 +4,24 @@ from queue import Queue
  
 import cherrypy
 import telegram
-from telegram import Update, update
+from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
 
 import config 
-import bot_handlers
+from bot_handlers import GenericCommand
 
- 
 class Website(object):
     @cherrypy.expose
     def index(self):
         return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
     index.exposed = True
-    
-    
-class Manage_bot(object):
+        
+class ManageBot(object):
     exposed = True
  
     def __init__(self, TOKEN, NAME):
-        super(Manage_bot, self).__init__()
+        super(ManageBot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
         self.bot = telegram.Bot(self.TOKEN)
@@ -36,8 +34,8 @@ class Manage_bot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
-        self.dp.add_handler(CommandHandler("start", bot_handlers.start))
-        self.dp.add_handler(MessageHandler(Filters.text, bot_handlers.echo))
+        self.dp.add_handler(CommandHandler("start", GenericCommand.start))
+        self.dp.add_handler(MessageHandler(Filters.text, GenericCommand.echo))
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
@@ -58,10 +56,11 @@ if __name__ == '__main__':
                         level=logging.INFO)
     logger = logging.getLogger(__name__)
     
-    
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(Website(), "/", {})
-    cherrypy.tree.mount(Manage_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
+    cherrypy.tree.mount(ManageBot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
     cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
+    
+    print("Bot started")
