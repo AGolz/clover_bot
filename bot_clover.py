@@ -17,19 +17,19 @@ class botHandler:
         return respJson
 
     def get_last_update(self):
-        result = self.getUpdates()
+        result = self.get_updates()
         if len(result) > 0:
-            updateLast = result[-1]
+            update_last = result[-1]
         else:
-            updateLast = result[len(result)]
-        return updateLast
+            update_last = result[len(result)]
+        return update_last
 
     def get_chat_id(update):
-        chatID = update['message']['chat']['id']
-        return chatID
+        chat_id = update['message']['chat']['id']
+        return chat_id
 
-    def send_message(self, chatID, text):
-        params = {'chat_id': chatID, 'text': text}
+    def send_message(self, chat_id, text):
+        params = {'chat_id': chat_id, 'text': text}
         method = 'sendMessage'
         response = requests.post(self.apiURL + method, data=params)
         return response
