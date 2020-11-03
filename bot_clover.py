@@ -25,7 +25,7 @@ class botHandler:
         return update_last
 
     def get_chat_id(update):
-        chat_id = update['message']['chat']['id']
+        chat_id = update['message']['chat_id']
         return chat_id
 
     def send_message(self, chat_id, text):
@@ -42,7 +42,7 @@ def main():
     
     last_update = bot.get_last_update()
     last_update_id = last_update['update_id']
-    last_chat_id = last_update_id['message']['chat']['id']
+    last_chat_id = last_update_id['message']['chat_id']
     bot.send_message(last_chat_id, 'Ky')
 
 if __name__ == '__main__':
