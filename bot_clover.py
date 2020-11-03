@@ -1,52 +1,73 @@
-import requests  
-import datetime
-
+import logging
+import os
+from queue import Queue
+ 
+import cherrypy
+import telegram
+from telegram import Update, update
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher, CallbackQueryHandler, CallbackContext
+ 
 import config 
-
-token = config.token 
-class botHandler:
-    def __init__(self, token = token):
-        self.token = config.token
-        self.apiURL = "https://api.telegram.org/bot{}/".format(token)
-
-    def get_updates(self, offset = None, timeout = 30):
-        params = {'timeout':timeout, 'offset':offset}
-        method = 'getUpdates'
-        response = requests.get(self.apiURL + method, data=params)
-        respJson = response.json()['result']
-        return respJson
-
-    def get_last_update(self):
-        result = self.get_updates()
-        if len(result) > 0:
-            update_last = result[-1]
-        else:
-            update_last = result[len(result)]
-        return update_last
-
-    def get_chat_id(update):
-        chat_id = update['message']['chat_id']
-        return chat_id
-
-    def send_message(self, chat_id, text):
-        params = {'chat_id': chat_id, 'text': text}
-        method = 'sendMessage'
-        response = requests.post(self.apiURL + method, data=params)
-        return response
-
-def main():
-    bot = botHandler(token)
+ 
+class Website(object):
+    @cherrypy.expose
+    def index(self):
+        return """<H1>Hi! Look for me in telegram @Padraig_clover_bot ;)</H1>"""
+    index.exposed = True
     
-    off_set_next = None
-    bot.get_updates(off_set_next)
     
-    last_update = bot.get_last_update()
-    last_update_id = last_update['update_id']
-    last_chat_id = last_update_id['message']['chat_id']
-    bot.send_message(last_chat_id, 'Ky')
-
+class Root_bot(object):
+    exposed = True
+ 
+    def __init__(self, TOKEN, NAME):
+        super(Root_bot, self).__init__()
+        self.TOKEN = TOKEN
+        self.NAME=NAME
+        self.bot = telegram.Bot(self.TOKEN)
+        
+        try:
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
+        except:
+            raise RuntimeError("Failed to set the webhook")
+ 
+        self.update_queue = Queue()
+        self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
+ 
+        self.dp.add_handler(CommandHandler("start", self.start))
+        self.dp.add_handler(MessageHandler(Filters.text, self.echo))
+        self.dp.add_error_handler(self.error_callback)
+        
+    @cherrypy.tools.json_in()
+    def POST(self, *args, **kwargs):
+        update = cherrypy.request.json
+        update = telegram.Update.de_json(update, self.bot)
+        self.dp.process_update(update)
+        
+    def start(update : Update, context : CallbackContext):
+        update.effective_message.reply_text("Ку")
+            
+    def echo(update : Update, context : CallbackContext):
+        update.effective_message.reply_text(update.message.text)
+        
+    def error_callback(self, context, update):
+        cherrypy.log("Error occurred - {}".format(context))
+        
+    
 if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        exit()
+    
+    TOKEN = config.token
+    NAME = config.nameapp
+    
+    PORT = os.environ.get('PORT')
+ 
+    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                        level=logging.INFO)
+    logger = logging.getLogger(__name__)
+    
+    
+    cherrypy.config.update({'server.socket_host': '0.0.0.0', })
+    cherrypy.config.update({'server.socket_port': int(PORT), })
+    cherrypy.tree.mount(Website(), "/", {})
+    cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
+    cherrypy.dispatch.MethodDispatcher()}})
+    cherrypy.engine.start()
