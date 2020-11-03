@@ -36,12 +36,18 @@ class Root_bot(object):
         self.dp.add_handler(CommandHandler("start", self.start))
         self.dp.add_handler(MessageHandler(Filters.text, self.echo))
         
+    @cherrypy.tools.json_in()
+    def POST(self, *args, **kwargs):
+        update = cherrypy.request.json
+        update = telegram.Update.de_json(update, self.bot)
+        print(update)
+        self.dp.process_update(update)
         
-    def start(update : Update, context : CallbackContext):
+    def start(self, update : Update, context : CallbackContext):
         print(context)
         update.effective_message.reply_text("Ку")
             
-    def echo(update : Update, context : CallbackContext):
+    def echo(self, update : Update, context : CallbackContext):
         print(context)
         update.effective_message.reply_text(update.message.text)
         
