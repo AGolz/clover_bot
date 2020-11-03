@@ -5,9 +5,12 @@ from queue import Queue
 import cherrypy
 import telegram
 from telegram import Update, update
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Dispatcher, CallbackQueryHandler, CallbackContext
- 
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
+
 import config 
+import bot_handlers
+
  
 class Website(object):
     @cherrypy.expose
@@ -16,11 +19,11 @@ class Website(object):
     index.exposed = True
     
     
-class Root_bot(object):
+class Manage_bot(object):
     exposed = True
  
     def __init__(self, TOKEN, NAME):
-        super(Root_bot, self).__init__()
+        super(Manage_bot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
         self.bot = telegram.Bot(self.TOKEN)
@@ -33,8 +36,8 @@ class Root_bot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
-        self.dp.add_handler(CommandHandler("start", self.start))
-        self.dp.add_handler(MessageHandler(Filters.text, self.echo))
+        self.dp.add_handler(CommandHandler("start", bot_handlers.start))
+        self.dp.add_handler(MessageHandler(Filters.text, bot_handlers.echo))
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
@@ -42,14 +45,7 @@ class Root_bot(object):
         update = telegram.Update.de_json(update, self.bot)
         self.dp.process_update(update)
         print(update)
-        
-    def start(self, update : Update, context : CallbackContext):
-        update.effective_message.reply_text("Ку")
-            
-    def echo(self, update : Update, context : CallbackContext):
-        update.effective_message.reply_text(update.message.text)
-        
-        
+              
     
 if __name__ == '__main__':
     
@@ -66,6 +62,6 @@ if __name__ == '__main__':
     cherrypy.config.update({'server.socket_host': '0.0.0.0', })
     cherrypy.config.update({'server.socket_port': int(PORT), })
     cherrypy.tree.mount(Website(), "/", {})
-    cherrypy.tree.mount(Root_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
+    cherrypy.tree.mount(Manage_bot(TOKEN, NAME),"/{}".format(TOKEN),{'/': {'request.dispatch': 
     cherrypy.dispatch.MethodDispatcher()}})
     cherrypy.engine.start()
