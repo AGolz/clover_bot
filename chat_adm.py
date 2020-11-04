@@ -1,7 +1,10 @@
-import config
+import time
+
 from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
-from telegram.ext.dispatcher import run_async
+
+import config
+
 
 
 def check_admin(update : Update, context : CallbackContext):
@@ -14,7 +17,6 @@ def check_admin(update : Update, context : CallbackContext):
 class AdmComm(object):
            
     @staticmethod 
-    @run_async
     def test(update : Update, context : CallbackContext):
         if check_admin(update, context): return
         
@@ -23,6 +25,8 @@ class AdmComm(object):
             if update.effective_message.photo:
                 photo_id = update.message.photo[-1].get_file()
                 update.effective_message.reply_text(photo_id)
+        
+        time.sleep(3)
 
 
           
