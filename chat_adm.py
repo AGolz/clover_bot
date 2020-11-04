@@ -22,12 +22,12 @@ class AdmComm(object):
         
         else:
             update.message.reply_text('Кидай фото')
-            def docs_photo (update, reply, quote=False, **args):
+            def docs_photo (update : Update, context : CallbackContext):
                 if update.message.photo:
                     photo_id = update.message.photo[-1].get_file()
-                    bot_reply = update.effective_message.reply_text(photo_id)
+                    update.effective_message.reply_text(photo_id)
                 else:
-                    bot_reply = update.effective_message.reply_text('это не фото %)')
+                    update.effective_message.reply_text('это не фото %)')
         
         time.sleep(3)
 
