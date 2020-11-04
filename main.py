@@ -10,7 +10,7 @@ from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
 
 import config 
 from bot_handlers import GenericComm
-from chat_adm import AdminComm
+from chat_adm import test
 
 class Website(object):
     @cherrypy.expose
