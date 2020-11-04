@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
 
 
-class GenericCommand(object):
+class GenericComm(object):
    
     @staticmethod
     def start(update : Update, context : CallbackContext):
