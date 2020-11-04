@@ -30,6 +30,7 @@ class AdmComm(object):
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
             mt = helpers.effective_message_type(update.message)
+            print(mt)
             if update.effective_message.photo:
                 photo_id = None
                 photo_id = update.message.photo[-1].get_file()
