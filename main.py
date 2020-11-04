@@ -36,7 +36,7 @@ class ManageBot(object):
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
-        self.dp.add_handler(CommandHandler("test", AdminComm.test))
+        self.dp.add_handler(CommandHandler("test", test))
         self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
         
     @cherrypy.tools.json_in()
