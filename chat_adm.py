@@ -23,9 +23,8 @@ def check_admin(update : Update, context : CallbackContext):
 class AdmComm(object):
      
     def test(update : Update, context : CallbackContext):
-        chek = check_admin(update, context)
-        print(chek)
-        if check_admin(update, context): return     
+        if check_admin(update, context) == False: return     
+        
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
             if update.message.photo:
