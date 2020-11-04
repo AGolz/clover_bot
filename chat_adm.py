@@ -1,11 +1,14 @@
 import time
 
+import telegram
 from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
 
 import config
 
 
+
+bot = telegram.Bot(config.token)
 
 def check_admin(update : Update, context : CallbackContext):
     user_id = update.effective_user.id
@@ -21,11 +24,13 @@ class AdmComm(object):
         if check_admin(update, context): return
         
         else:
-            update.message.reply_text('Кидай фото')
-            def docs_photo (update : Update, context : CallbackContext):
+            context.bot.send_message(chat_id=config.admin, text='Кидай фото')
+            
+            def docs_photo(update : Update, context : CallbackContext):
+                photo_id = None
                 if update.message.photo:
                     photo_id = update.message.photo[-1].get_file()
-                    update.effective_message.reply_text(photo_id)
+                    context.bot.send_message(chat_id=config.admin, text=photo_id)
                 else:
                     update.effective_message.reply_text('это не фото %)')
         
