@@ -25,13 +25,12 @@ class AdmComm(object):
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
             
-            def docs_photo(update : Update, context : CallbackContext):
-                photo_id = None
-                if update.message.photo:
-                    photo_id = update.message.photo[-1].get_file()
-                    context.bot.send_message(chat_id=config.admin, text=photo_id)
-                else:
-                    update.effective_message.reply_text('это не фото %)')
+            photo_id = None
+            if update.message.photo:
+                photo_id = update.message.photo[-1].get_file()
+                context.bot.send_message(chat_id=config.admin, text=photo_id)
+            else:
+                update.effective_message.reply_text('это не фото %)')
         
         time.sleep(3)
 
