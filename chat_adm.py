@@ -17,11 +17,15 @@ def check_admin(update : Update, context : CallbackContext):
         user_name = update.effective_user.username
         update.effective_message.reply_text('Access denied for {}.'.format(user_name))
         return update.effective_user.id == config.admin
+        
+    
 
 class AdmComm(object):
      
     def test(update : Update, context : CallbackContext):
-        if check_admin(update, context): print(check_admin)     
+        chek = check_admin(update, context)
+        print(chek)
+        if check_admin(update, context): return     
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
             if update.message.photo:
