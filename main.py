@@ -25,6 +25,7 @@ class ManageBot(object):
         super(ManageBot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
+        self.bot = telegram.Bot(self.TOKEN)
         
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
