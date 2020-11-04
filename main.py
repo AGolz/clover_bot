@@ -42,6 +42,7 @@ class ManageBot(object):
         self.conv_handler = ConversationHandler(
             entry_points=[CommandHandler("test", AdmComm.test)],
             states=[MessageHandler(Filters.photo, AdmComm.photo_add)],
+            fallbacks=[MessageHandler(Filters.all & ~Filters.photo, "это не фото")],
         )
         self.dispatcher.add_handler(conv_handler)            
         
