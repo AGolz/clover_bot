@@ -21,10 +21,13 @@ class AdmComm(object):
         if check_admin(update, context): return
         
         else:
-            update.effective_message.reply_text('Кидай фото')
-            if update.effective_message.photo:
-                photo_id = update.message.photo[-1].get_file()
-                update.effective_message.reply_text(photo_id)
+            update.message.reply_text('Кидай фото')
+            def docs_photo (update, reply, quote=False, **args):
+                if update.message.photo:
+                    photo_id = update.message.photo[-1].get_file()
+                    bot_reply = update.effective_message.reply_text(photo_id)
+                else:
+                    bot_reply = update.effective_message.reply_text('это не фото %)')
         
         time.sleep(3)
 
