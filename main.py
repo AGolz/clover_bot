@@ -9,7 +9,8 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
 
 import config 
-from bot_handlers import GenericCommand
+from bot_handlers import GenericComm
+from chat_adm import AdminComm
 
 class Website(object):
     @cherrypy.expose
@@ -34,8 +35,9 @@ class ManageBot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
-        self.dp.add_handler(CommandHandler("start", GenericCommand.start))
-        self.dp.add_handler(MessageHandler(Filters.text, GenericCommand.echo))
+        self.dp.add_handler(CommandHandler("start", GenericComm.start))
+        self.dp.add_handler(CommandHandler("test", AdminComm.test))
+        self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
