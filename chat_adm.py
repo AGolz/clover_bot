@@ -19,7 +19,7 @@ def check_admin(update : Update, context : CallbackContext):
 
 class AdmComm(object):
      
-    def test(self, update : Update, context : CallbackContext):
+    def test(update : Update, context : CallbackContext):
         if check_admin(update, context): return
         
         else:
