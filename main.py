@@ -42,12 +42,12 @@ class ManageBot(object):
         self.conv_handler = ConversationHandler(
             entry_points=[CommandHandler("test", AdmComm.test)],
             states=[MessageHandler(Filters.photo, AdmComm.photo_add)],
-            fallbacks=[MessageHandler("это не фото")],
+            fallbacks=[MessageHandler(~Filters.photo, "это не фото")],
         )
         self.dispatcher.add_handler(conv_handler)            
         
         
-    @cherrypy.tools.json_in()
+    @cherrypy.tools.json_in(),
     def POST(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
