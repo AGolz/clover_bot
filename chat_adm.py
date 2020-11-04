@@ -4,7 +4,7 @@ from telegram.ext import CallbackQueryHandler, CallbackContext
 
 
 def check_admin(update : Update, context : CallbackContext):
-    user_id = str(update.effective_user.id)
+    user_id = update.effective_user.id
     user_name = update.effective_user.username
     
     if user_id != config.admin:
@@ -13,6 +13,7 @@ def check_admin(update : Update, context : CallbackContext):
 class AdmComm(object):
            
     @staticmethod 
+    @run_async
     def test(update : Update, context : CallbackContext):
         if check_admin(update, context): return
         
@@ -21,4 +22,6 @@ class AdmComm(object):
             if message.photo:
                 photo_id = update.message.photo[-1].get_file()
                 update.effective_message.reply_text(photo_id)
+
+
           
