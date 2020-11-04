@@ -1,6 +1,7 @@
 import config
-from telegram import Update, message
+from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
+from telegram.ext.dispatcher import run_async
 
 
 def check_admin(update : Update, context : CallbackContext):
@@ -19,7 +20,7 @@ class AdmComm(object):
         
         else:
             update.effective_message.reply_text('Кидай фото')
-            if message.photo:
+            if update.effective_message.photo:
                 photo_id = update.message.photo[-1].get_file()
                 update.effective_message.reply_text(photo_id)
 
