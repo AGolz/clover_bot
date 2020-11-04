@@ -10,11 +10,10 @@ import config
 
 bot = telegram.Bot(config.token)
 
+
 def check_admin(update : Update, context : CallbackContext):
-    user_id = update.effective_user.id
-    user_name = update.effective_user.username
-    
-    if user_id != config.admin:
+    if update.effective_user.id != config.admin:
+        user_name = update.effective_user.username
         update.effective_message.reply_text('Access denied for {}.'.format(user_name))
 
 class AdmComm(object):
