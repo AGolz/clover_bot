@@ -23,7 +23,7 @@ class AdmComm(object):
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
         
-        return ConversationHandler.states
+        return ConversationHandler.states['PHOTO']
         
             
     def photo_add(update : Update, context : CallbackContext):
