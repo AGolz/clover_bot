@@ -8,6 +8,7 @@ import config
 
 
 
+
 bot = telegram.Bot(config.token)
 
 
@@ -17,16 +18,14 @@ def check_admin(update : Update, context : CallbackContext):
         update.effective_message.reply_text('Access denied for {}.'.format(user_name))
 
 class AdmComm(object):
-           
-    @staticmethod 
-    def test(update : Update, context : CallbackContext):
+     
+    def test(self, update : Update, context : CallbackContext):
         if check_admin(update, context): return
         
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
-            
-            photo_id = None
             if update.message.photo:
+                photo_id = None
                 photo_id = update.message.photo[-1].get_file()
                 context.bot.send_message(chat_id=config.admin, text=photo_id)
             else:
