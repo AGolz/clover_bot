@@ -3,8 +3,10 @@ import time
 import telegram
 from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
+from telegram.utils import helpers
 
 import config
+
 
 
 
@@ -27,7 +29,8 @@ class AdmComm(object):
         
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
-            if update.message.photo:
+            mt = helpers.effective_message_type(update.message)
+            if update.effective_message.photo:
                 photo_id = None
                 photo_id = update.message.photo[-1].get_file()
                 context.bot.send_message(chat_id=config.admin, text=photo_id)
