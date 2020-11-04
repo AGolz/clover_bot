@@ -47,7 +47,7 @@ class ManageBot(object):
         self.dispatcher.add_handler(conv_handler)            
         
         
-    @cherrypy.tools.json_in(),
+    @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
         update = cherrypy.request.json
         update = telegram.Update.de_json(update, self.bot)
