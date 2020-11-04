@@ -40,7 +40,6 @@ class ManageBot(object):
         
         
         self.dp.add_handler(CommandHandler("test", AdmComm.test))
-        self.dp.add_handler(MessageHandler(Filters.user(config.admin) & Filters.photo, AdmComm.docs_photo))
     
         
     @cherrypy.tools.json_in()
