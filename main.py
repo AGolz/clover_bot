@@ -36,8 +36,9 @@ class ManageBot(object):
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
-        self.dp.add_handler(CommandHandler("test", AdmComm.test))
         self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
+        
+        self.dp.add_handler(CommandHandler("test", AdmComm.test))
         
     
         
