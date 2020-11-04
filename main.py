@@ -45,7 +45,7 @@ class ManageBot(object):
             },
             fallbacks=[MessageHandler(Filters.all & ~Filters.photo, "это не фото")],
         )
-        self.dp.add_handler(conv_handler)            
+        self.dp.add_handler(self.conv_handler)            
         
         
     @cherrypy.tools.json_in()
