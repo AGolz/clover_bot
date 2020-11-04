@@ -10,7 +10,7 @@ from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
 
 import config 
 from bot_handlers import GenericComm
-from chat_adm import AdmComm
+from chat_adm import test
 
 class Website(object):
     @cherrypy.expose
@@ -36,7 +36,7 @@ class ManageBot(object):
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
-        self.dp.add_handler(CommandHandler("test", AdmComm.test))
+        self.dp.add_handler(CommandHandler("test", test))
         self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
         
     
