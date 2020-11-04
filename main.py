@@ -25,28 +25,28 @@ class ManageBot(object):
         super(ManageBot, self).__init__()
         self.TOKEN = TOKEN
         self.NAME=NAME
-        self.bot = telegram.Bot(self.TOKEN)
         
-        try:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
-        except:
-            raise RuntimeError("Failed to set the webhook")
- 
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
         
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
-        self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
+        self.dp.add_handler(MessageHandler(Filters.text & (~Filters.command), GenericComm.echo))
         
         self.conv_handler = ConversationHandler(
             entry_points=[CommandHandler("test", AdmComm.test)],
-            states={config.PHOTO: [MessageHandler(Filters.photo, AdmComm.photo_add)],
+            states={
+                config.PHOTO: [MessageHandler(Filters.photo, AdmComm.photo_add)],
             },
-            fallbacks=[MessageHandler(Filters.all & ~Filters.photo, "это не фото")],
+            fallbacks=[MessageHandler(Filters.all & (~Filters.photo), "это не фото")],
         )
-        self.dp.add_handler(self.conv_handler)            
+        self.dp.add_handler(self.conv_handler)      
         
+        try:
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
+        except:
+            raise RuntimeError("Failed to set the webhook")
+              
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):

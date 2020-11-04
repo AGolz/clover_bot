@@ -4,7 +4,6 @@ import telegram
 from telegram import ReplyKeyboardRemove, Update
 from telegram.ext import CallbackContext, CallbackQueryHandler
 from telegram.ext import CommandHandler, ConversationHandler, Filters, MessageHandler
-from telegram.utils import helpers
 
 import config
 
