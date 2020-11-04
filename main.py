@@ -6,7 +6,7 @@ import cherrypy
 import telegram
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from telegram.ext import Dispatcher, CallbackQueryHandler, CallbackContext
+from telegram.ext import CallbackContext, CallbackQueryHandler, ConversationHandler, Dispatcher
 
 import config 
 from bot_handlers import GenericComm
@@ -34,13 +34,19 @@ class ManageBot(object):
  
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
+        
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
         self.dp.add_handler(MessageHandler(Filters.text, GenericComm.echo))
         
-        self.dp.add_handler(CommandHandler("test", AdmComm.test))
+        self.conv_handler = ConversationHandler(
+            entry_points=[CommandHandler("test", AdmComm.test)],
+            states={PHOTO: [MessageHandler(Filters.photo, AdmComm.photo_add)]
+            },
+            fallbacks=[MessageHandler("это не фото %)")],
+        )
+        self.dispatcher.add_handler(conv_handler)            
         
-    
         
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
