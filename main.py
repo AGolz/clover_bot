@@ -70,7 +70,7 @@ class ManageBot(object):
             states={
                 config.STICKER: [MessageHandler(Filters.sticker, AdmComm.stickers_add)],
             },
-            fallbacks=[MessageHandler(Filters.all & (~Filters.sticker), "это не док")],
+            fallbacks=[MessageHandler(Filters.all & (~Filters.sticker), "это не стикер")],
         )
         self.dp.add_handler(self.conv_stickers_add)     
            
