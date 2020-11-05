@@ -27,13 +27,13 @@ class ManageBot(object):
         self.NAME=NAME
         self.bot = telegram.Bot(self.TOKEN)
         
-        self.update_queue = Queue()
-        self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
-        
         try:
             self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
         except:
             raise RuntimeError("Failed to set the webhook")
+        
+        self.update_queue = Queue()
+        self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
         self.dp.add_handler(MessageHandler(Filters.text & (~Filters.command), GenericComm.echo))
