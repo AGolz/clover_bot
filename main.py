@@ -39,7 +39,7 @@ class ManageBot(object):
         self.dp.add_handler(MessageHandler(Filters.text & (~Filters.command), GenericComm.echo))
         
         self.conv_photo_add = ConversationHandler(
-            entry_points=[CommandHandler("test", AdmComm.adm_photo)],
+            entry_points=[CommandHandler("photo_add", AdmComm.adm_photo)],
             states={
                 config.PHOTO: [MessageHandler(Filters.photo, AdmComm.photo_add)],
             },
@@ -48,7 +48,7 @@ class ManageBot(object):
         self.dp.add_handler(self.conv_photo_add)  
         
         self.conv_audio_add = ConversationHandler(
-            entry_points=[CommandHandler("test", AdmComm.adm_audio)],
+            entry_points=[CommandHandler("audio_add", AdmComm.adm_audio)],
             states={
                 config.AUDIO: [MessageHandler(Filters.audio, AdmComm.audio_add)],
             },
@@ -57,7 +57,7 @@ class ManageBot(object):
         self.dp.add_handler(self.conv_audio_add)
         
         self.conv_docs_add = ConversationHandler(
-            entry_points=[CommandHandler("test", AdmComm.adm_docs)],
+            entry_points=[CommandHandler("docs_add", AdmComm.adm_docs)],
             states={
                 config.DOCS: [MessageHandler(Filters.document, AdmComm.docs_add)],
             },
@@ -66,7 +66,7 @@ class ManageBot(object):
         self.dp.add_handler(self.conv_docs_add)     
         
         self.conv_stickers_add = ConversationHandler(
-            entry_points=[CommandHandler("test", AdmComm.adm_stickers)],
+            entry_points=[CommandHandler("sticker_add", AdmComm.adm_stickers)],
             states={
                 config.STICKER: [MessageHandler(Filters.sticker, AdmComm.stickers_add)],
             },

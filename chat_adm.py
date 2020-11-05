@@ -42,7 +42,7 @@ class AdmComm(object):
             update.message.reply_text(audio_id)       
         return ConversationHandler.END
     
-    def adm_doc(update : Update, context : CallbackContext):
+    def adm_docs(update : Update, context : CallbackContext):
         if check_admin(update, context) == False: return
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай док')
