@@ -15,3 +15,4 @@ class GenericComm(object):
     def echo(update : Update, context : CallbackContext):
         update.effective_message.reply_text(update.message.text)
         time.sleep(3)
+        

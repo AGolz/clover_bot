@@ -30,25 +30,50 @@ class ManageBot(object):
         self.update_queue = Queue()
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
         
+        try:
+            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
+        except:
+            raise RuntimeError("Failed to set the webhook")
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
         self.dp.add_handler(MessageHandler(Filters.text & (~Filters.command), GenericComm.echo))
         
-        self.conv_handler = ConversationHandler(
-            entry_points=[CommandHandler("test", AdmComm.test)],
+        self.conv_photo_add = ConversationHandler(
+            entry_points=[CommandHandler("test", AdmComm.adm_photo)],
             states={
                 config.PHOTO: [MessageHandler(Filters.photo, AdmComm.photo_add)],
             },
             fallbacks=[MessageHandler(Filters.all & (~Filters.photo), "это не фото")],
         )
-        self.dp.add_handler(self.conv_handler)      
+        self.dp.add_handler(self.conv_photo_add)  
         
-        try:
-            self.bot.setWebhook("https://{}.herokuapp.com/{}".format(self.NAME, self.TOKEN))
-        except:
-            raise RuntimeError("Failed to set the webhook")
-              
+        self.conv_audio_add = ConversationHandler(
+            entry_points=[CommandHandler("test", AdmComm.adm_audio)],
+            states={
+                config.AUDIO: [MessageHandler(Filters.audio, AdmComm.audio_add)],
+            },
+            fallbacks=[MessageHandler(Filters.all & (~Filters.audio), "это не аудио")],
+        )
+        self.dp.add_handler(self.conv_audio_add)
         
+        self.conv_docs_add = ConversationHandler(
+            entry_points=[CommandHandler("test", AdmComm.adm_docs)],
+            states={
+                config.DOCS: [MessageHandler(Filters.document, AdmComm.docs_add)],
+            },
+            fallbacks=[MessageHandler(Filters.all & (~Filters.document), "это не док")],
+        )
+        self.dp.add_handler(self.conv_docs_add)     
+        
+        self.conv_stickers_add = ConversationHandler(
+            entry_points=[CommandHandler("test", AdmComm.adm_stickers)],
+            states={
+                config.STICKER: [MessageHandler(Filters.sticker, AdmComm.stickers_add)],
+            },
+            fallbacks=[MessageHandler(Filters.all & (~Filters.sticker), "это не док")],
+        )
+        self.dp.add_handler(self.conv_stickers_add)     
+           
     @cherrypy.tools.json_in()
     def POST(self, *args, **kwargs):
         update = cherrypy.request.json

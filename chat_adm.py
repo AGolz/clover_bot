@@ -16,21 +16,56 @@ def check_admin(update : Update, context : CallbackContext):
         
 class AdmComm(object):
     
-    
-    def test(update : Update, context : CallbackContext):
+    def adm_photo(update : Update, context : CallbackContext):
         if check_admin(update, context) == False: return     
         else:
             context.bot.send_message(chat_id=config.admin, text='Кидай фото')
-        
         return config.PHOTO
-        
-            
+           
     def photo_add(update : Update, context : CallbackContext):
         photo_id = None
         if update.message.photo:
             photo_id = update.message.photo[-1].file_id
-            update.message.reply_text(photo_id)       
-            
+            update.message.reply_text(photo_id)        
+        return ConversationHandler.END
+    
+    def adm_audio(update : Update, context : CallbackContext):
+        if check_admin(update, context) == False: return     
+        else:
+            context.bot.send_message(chat_id=config.admin, text='Кидай аудио')
+        return config.AUDIO
+    
+    def audio_add(update : Update, context : CallbackContext):
+        audio_id = None
+        if update.message.audio:
+            audio_id = update.message.audio.file_id
+            update.message.reply_text(audio_id)       
+        return ConversationHandler.END
+    
+    def adm_doc(update : Update, context : CallbackContext):
+        if check_admin(update, context) == False: return
+        else:
+            context.bot.send_message(chat_id=config.admin, text='Кидай док')
+        return config.DOCS
+    
+    def docs_add(update : Update, context : CallbackContext):
+        doc_id = None
+        if update.message.document:
+            doc_id = update.message.document.file_id
+            update.message.reply_text(doc_id)       
+        return ConversationHandler.END
+    
+    def adm_stickers(update : Update, context : CallbackContext):
+        if check_admin(update, context) == False: return
+        else:
+            context.bot.send_message(chat_id=config.admin, text='Кидай стикер')
+        return config.STICKER
+    
+    def stickers_add(update : Update, context : CallbackContext):
+        stickers_id = None
+        if update.message.sticker:
+            stickers_id = update.message.sticker.file_id
+            update.message.reply_text(stickers_id)       
         return ConversationHandler.END
         
 
