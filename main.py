@@ -57,7 +57,8 @@ class ManageBot(object):
         self.dp.add_handler(self.conv_audio_add)
         
         self.conv_docs_add = ConversationHandler(
-            entry_points=[CommandHandler("docs_add", AdmComm.adm_docs)],
+            entry_points=[CommandHandler("
+                                         ", AdmComm.adm_docs)],
             states={
                 config.DOCS: [MessageHandler(Filters.document, AdmComm.docs_add)],
             },
