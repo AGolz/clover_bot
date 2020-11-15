@@ -36,7 +36,7 @@ class ManageBot(object):
         self.dp = Dispatcher(self.bot, self.update_queue, use_context=True)
  
         self.dp.add_handler(CommandHandler("start", GenericComm.start))
-        self.dp.add_handler(MessageHandler(Filters.text & (~Filters.command), GenericComm.echo))
+        self.dp.add_handler(MessageHandler(Filters.text('кинь музыку') & (~Filters.command), GenericComm.music_get))
         
         self.conv_photo_add = ConversationHandler(
             entry_points=[CommandHandler("photo_add", AdmComm.adm_photo)],
@@ -88,6 +88,7 @@ if __name__ == '__main__':
     NAME = config.nameapp
     
     PORT = os.environ.get('PORT')
+    
  
     logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                         level=logging.INFO)

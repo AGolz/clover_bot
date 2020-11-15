@@ -2,6 +2,8 @@ import time
 
 from telegram import Update
 from telegram.ext import CallbackQueryHandler, CallbackContext
+import config
+from postgre_sql import PostgreSQL
 
 class GenericComm(object):
    
@@ -9,7 +11,9 @@ class GenericComm(object):
         update.effective_message.reply_text("Ку")
         time.sleep(3)
                   
-    def echo(update : Update, context : CallbackContext):
-        update.effective_message.reply_text(update.message.text)
+    def music_get(update : Update, context : CallbackContext):
+        config.index_id = 101
+        file_id = PostgreSQL.extract_id()
+        context.bot.send_audio(chat_id=chat_id, audio=file_id)
         time.sleep(3)
         
