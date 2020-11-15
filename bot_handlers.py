@@ -13,7 +13,8 @@ class GenericComm(object):
                   
     def music_get(update : Update, context : CallbackContext):
         config.column_id = 101
-        file_id = PostgreSQL.extract_id()
+        psql = PostgreSQL()
+        file_id = psql.extract_id()
         print(file_id)
         context.bot.send_audio(chat_id=update.effective_chat.id, audio=file_id)
         time.sleep(3)
