@@ -10,10 +10,8 @@ class PostgreSQL:
             print('Database opened')
             with conn, conn.cursor() as cur: 
                 cur.execute("SELECT * FROM admin_file WHERE id = %d" % (config.column_id))
-                db_row = cur.fetchone()
-                for row in db_row:
-                    file_id = row['file_id']
-                    print(file_id)
+                file_id = cur.fetchone()
+                print(file_id)
         return file_id
                     
                 
