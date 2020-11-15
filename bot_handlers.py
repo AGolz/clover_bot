@@ -12,7 +12,7 @@ class GenericComm(object):
         time.sleep(3)
                   
     def music_get(update : Update, context : CallbackContext):
-        config.index_id = 101
+        config.column_id = 101
         file_id = None
         PostgreSQL.extract_id(file_id)
         context.bot.send_audio(chat_id=chat_id, audio=file_id)
