@@ -11,8 +11,7 @@ class PostgreSQL:
             with conn, conn.cursor() as cur: 
                 cur.execute("SELECT * FROM admin_file WHERE id = %d" % (config.column_id))
                 file_id = cur.fetchone()[0].strip()
-                print(file_id)
-        return file_id
+            return file_id
                     
                 
             
