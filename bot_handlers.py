@@ -15,6 +15,7 @@ class GenericComm(object):
         config.column_id = 101
         file_id = None
         PostgreSQL.extract_id(file_id)
+        print(file_id)
         context.bot.send_audio(chat_id=update.effective_chat.id, audio=file_id)
         time.sleep(3)
         
