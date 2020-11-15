@@ -9,6 +9,7 @@ class PostgreSQL:
         self.connect = psycopg2.connect(dbname=config.db_name, user=config.db_user, 
                         password=config.db_pass, host=config.db_host)
         self.cursor = connect.cursor()
+        print("Database opened")
         
     def select_all(self):
         with self.connect:
@@ -16,7 +17,7 @@ class PostgreSQL:
         
     def select_single(self, rownum):
         with self.connect:
-            return self.cursor.execute('SELECT * FROM admin_file WHERE id = ?', (rownum,)).fetchall()[0]
+            return self.cursor.execute('SELECT * FROM admin_file WHERE index = ?', (rownum,)).fetchall()[0]
         
     def count_rows(self):
         with self.connect:
